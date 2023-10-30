@@ -167,6 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
       paused: true,
       defaults: { ease: 'none' },
     });
+    tl.set(clipFront, { opacity: 1 });
     tl.set(clipBack, { opacity: 1 });
     // step 1
     tl.fromTo(
@@ -199,7 +200,6 @@ document.addEventListener('DOMContentLoaded', function () {
       },
       '<'
     );
-
     //final step
     tl.to(clipFront, {
       clipPath: 'polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%)',
@@ -213,8 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
       },
       '<'
     );
-
-    //special ease for entire timeline - tween the timeline ...
+    // ease the entire timeline
     let animation = gsap.to(tl, {
       time: tl.duration(),
       paused: true,
