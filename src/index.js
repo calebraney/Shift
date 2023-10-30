@@ -159,46 +159,75 @@ document.addEventListener('DOMContentLoaded', function () {
     //return if elements aren't fount
     if (!clipBack || !clipFront) return;
     // set duration
-    let DURATION = attr(300, clipItem.getAttribute('clip-duration'));
-    let DURATION_MS = DURATION / 1000;
-    console.log(DURATION, DURATION_MS);
+    let EASE = attr('power2.inOut', clipItem.getAttribute('clip-ease'));
+    let DURATION_MS = attr(300, clipItem.getAttribute('clip-duration'));
+    let DURATION = DURATION_MS / 1000;
 
     let tl = gsap.timeline({
       paused: true,
-      ease: 'power3.out',
-      defaults: { duration: DURATION_MS * 0.7, ease: 'none' },
+      defaults: { ease: 'none' },
     });
     tl.set(clipBack, { opacity: 1 });
     // step 1
     tl.fromTo(
       clipFront,
-      { clipPath: 'polygon(100% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%)' },
+      { clipPath: 'polygon(100% 0%, 100% 100%, 100% 100%, 0% 100%, 0% 0%)' },
       {
         clipPath: 'polygon(100% 0%, 100% 0%, 80% 100%, 0% 100%, 0% 0%)',
-        duration: DURATION_MS * 0.1,
+        duration: DURATION * 0.1,
       }
     );
+    tl.fromTo(
+      clipBack,
+      { clipPath: 'polygon(100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%)' },
+      {
+        clipPath: 'polygon(100% 0%, 100% 100%, 80% 100%, 80% 100%, 100% 0%)',
+        duration: DURATION * 0.1,
+      },
+      '<'
+    );
     //Step 2
-    tl.to(clipFront, { clipPath: 'polygon(20% 0%, 20% 0%, 0% 100%, 0% 100%, 0% 0%)' });
-    // tl.fromTo(
-    //   clipBack,
-    //   { clipPath: 'polygon(100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%)' },
-    //   { clipPath: 'polygon(100% 0%, 100% 100%, 0% 100%, 0% 100%, 100% 0%)' },
-    //   '<'
-    // );
+    tl.to(clipFront, {
+      clipPath: 'polygon(20% 0%, 20% 0%, 0% 100%, 0% 100%, 0% 0%)',
+      duration: DURATION * 0.8,
+    });
+    tl.to(
+      clipBack,
+      {
+        clipPath: 'polygon(100% 0%, 100% 100%, 0% 100%, 0% 100%, 20% 0%)',
+        duration: DURATION * 0.8,
+      },
+      '<'
+    );
+
     //final step
     tl.to(clipFront, {
-      clipPath: 'polygon(0% 0%, 0% 0%, 0% 0%, 0% 100%, 0% 0%)',
-      duration: DURATION_MS * 0.1,
+      clipPath: 'polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%)',
+      duration: DURATION * 0.1,
     });
-    // tl.to(clipBack, { clipPath: 'polygon(100% 0%, 100% 100%, 0% 100%, 0% 0%, 0% 0%)' }, '<');
+    tl.to(
+      clipBack,
+      {
+        clipPath: 'polygon(100% 0%, 100% 100%, 0% 100%, 0% 0%, 0% 0%)',
+        duration: DURATION * 0.1,
+      },
+      '<'
+    );
+
+    //special ease for entire timeline - tween the timeline ...
+    let animation = gsap.to(tl, {
+      time: tl.duration(),
+      paused: true,
+      duration: tl.duration(),
+      ease: EASE,
+    });
 
     clipItem.addEventListener('mouseenter', function () {
-      tl.play();
+      animation.play();
     });
 
     clipItem.addEventListener('mouseleave', function () {
-      tl.reverse();
+      animation.reverse();
     });
   });
 
