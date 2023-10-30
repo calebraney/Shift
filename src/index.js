@@ -4,7 +4,7 @@ import { attr } from './utilities';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
-  console.log('Local Script Loaded');
+  // console.log('Local Script Loaded');
 
   //////////////////////////////
   // Global Variables
@@ -229,23 +229,6 @@ document.addEventListener('DOMContentLoaded', function () {
       animation.reverse();
     });
   });
-
-  /*
-      tl.fromTo(
-      clipFront,
-      { clipPath: 'polygon(100% 0%, 100% 100%, 100% 100%, 0% 100%, 0% 0%)' },
-      { clipPath: 'polygon(100% 0%, 100% 0%, 0% 100%, 0% 100%, 0% 0%)' }
-    );
-    tl.fromTo(
-      clipBack,
-      { clipPath: 'polygon(100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%)' },
-      { clipPath: 'polygon(100% 0%, 100% 100%, 0% 100%, 0% 100%, 100% 0%)' },
-      '<'
-    );
-    //final step
-    tl.to(clipFront, { clipPath: 'polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%)' });
-    tl.to(clipBack, { clipPath: 'polygon(100% 0%, 100% 100%, 0% 100%, 0% 0%, 0% 0%)' }, '<');
-  */
 
   //split text utility
   const runSplit = function (text) {
