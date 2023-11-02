@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const pageWrapper = document.querySelector('.page-wrapper');
   const pageMain = document.querySelector('.main-wrapper');
   const clipItems = document.querySelectorAll('[clip-parent]');
-  const CLIP_FRONT = '[clip-front]';
-  const CLIP_BACK = '[clip-back]';
+  const CLIP_DEFAULT = '[clip-default]';
+  const CLIP_HOVER = '[clip-hover]';
   const LOAD_GRID = '.load_grid';
   const LOAD_SQUARES = '.load_grid-item';
   const TRANSITION_DURATION = 0.35;
@@ -154,10 +154,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Clip Hover Animation
   clipItems.forEach(function (clipItem) {
-    let clipBack = clipItem.querySelector(CLIP_BACK);
-    let clipFront = clipItem.querySelector(CLIP_FRONT);
+    let clipHover = clipItem.querySelector(CLIP_HOVER);
+    let clipDefault = clipItem.querySelector(CLIP_DEFAULT);
     //return if elements aren't fount
-    if (!clipBack || !clipFront) return;
+    if (!clipHover) return;
     // set duration
     let EASE = attr('power2.inOut', clipItem.getAttribute('clip-ease'));
     let DURATION_MS = attr(300, clipItem.getAttribute('clip-duration'));
@@ -167,52 +167,54 @@ document.addEventListener('DOMContentLoaded', function () {
       paused: true,
       defaults: { ease: 'none' },
     });
-    tl.set(clipFront, { opacity: 1 });
-    tl.set(clipBack, { opacity: 1 });
+    tl.set(clipDefault, { opacity: 1 });
+    tl.set(clipHover, { opacity: 1 });
     // step 1
     tl.fromTo(
-      clipFront,
-      { clipPath: 'polygon(100% 0%, 100% 100%, 100% 100%, 0% 100%, 0% 0%)' },
-      {
-        clipPath: 'polygon(100% 0%, 100% 0%, 80% 100%, 0% 100%, 0% 0%)',
-        duration: DURATION * 0.1,
-      }
-    );
-    tl.fromTo(
-      clipBack,
+      clipHover,
       { clipPath: 'polygon(100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%)' },
       {
         clipPath: 'polygon(100% 0%, 100% 100%, 80% 100%, 80% 100%, 100% 0%)',
         duration: DURATION * 0.1,
-      },
-      '<'
+      }
     );
     //Step 2
-    tl.to(clipFront, {
-      clipPath: 'polygon(20% 0%, 20% 0%, 0% 100%, 0% 100%, 0% 0%)',
+    tl.to(clipHover, {
+      clipPath: 'polygon(100% 0%, 100% 100%, 0% 100%, 0% 100%, 20% 0%)',
       duration: DURATION * 0.8,
     });
-    tl.to(
-      clipBack,
-      {
-        clipPath: 'polygon(100% 0%, 100% 100%, 0% 100%, 0% 100%, 20% 0%)',
-        duration: DURATION * 0.8,
-      },
-      '<'
-    );
     //final step
-    tl.to(clipFront, {
-      clipPath: 'polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%)',
+    tl.to(clipHover, {
+      clipPath: 'polygon(100% 0%, 100% 100%, 0% 100%, 0% 0%, 0% 0%)',
       duration: DURATION * 0.1,
     });
-    tl.to(
-      clipBack,
-      {
-        clipPath: 'polygon(100% 0%, 100% 100%, 0% 100%, 0% 0%, 0% 0%)',
-        duration: DURATION * 0.1,
-      },
-      '<'
-    );
+    if (clipDefault) {
+      tl.fromTo(
+        clipDefault,
+        { clipPath: 'polygon(100% 0%, 100% 100%, 100% 100%, 0% 100%, 0% 0%)' },
+        {
+          clipPath: 'polygon(100% 0%, 100% 0%, 80% 100%, 0% 100%, 0% 0%)',
+          duration: DURATION * 0.1,
+        },
+        0
+      );
+      tl.to(
+        clipDefault,
+        {
+          clipPath: 'polygon(20% 0%, 20% 0%, 0% 100%, 0% 100%, 0% 0%)',
+          duration: DURATION * 0.8,
+        },
+        '>'
+      );
+      tl.to(
+        clipDefault,
+        {
+          clipPath: 'polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%)',
+          duration: DURATION * 0.1,
+        },
+        '>'
+      );
+    }
     // ease the entire timeline
     let animation = gsap.to(tl, {
       time: tl.duration(),
