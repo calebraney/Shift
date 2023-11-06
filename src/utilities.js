@@ -8,3 +8,11 @@ export const attr = function (defaultVal, attrVal) {
   if (!isNaN(attrVal) && defaultValType === 'number') return +attrVal;
   return defaultVal;
 };
+
+//split text utility
+export const runSplit = function (text) {
+  typeSplit = new SplitType(text, {
+    types: 'lines, words',
+  });
+  return typeSplit;
+};
