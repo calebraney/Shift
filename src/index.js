@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const CLIP_HOVER = '[clip-hover]';
   const LOAD_GRID = '.load_grid';
   const LOAD_SQUARES = '.load_grid-item';
+  const LOAD_PREVENT_ATTR = '[prevent-load]';
   const TRANSITION_DURATION = 0.35;
 
   //GSAP Selectors
@@ -101,7 +102,8 @@ document.addEventListener('DOMContentLoaded', function () {
       if (
         this.hostname === window.location.host &&
         this.href.indexOf('#') === -1 &&
-        this.target !== '_blank'
+        this.target !== '_blank' &&
+        !this.hasAttribute(LOAD_PREVENT_ATTR)
       ) {
         e.preventDefault();
         let destination = this.getAttribute('href');
