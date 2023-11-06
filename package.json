@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.27",
+    "macy": "^2.5.1",
     "split-type": "^0.3.3"
   }
 }

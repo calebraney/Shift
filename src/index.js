@@ -2,6 +2,7 @@ import SplitType from 'split-type';
 import Lenis from '@studio-freight/lenis';
 import { attr } from './utilities';
 import { runSplit } from './utilities';
+import Macy from 'macy';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
@@ -248,8 +249,79 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
 
+  //////////////////////////////
+  //Macy JS Grid
+
+  const macyGrid = function () {
+    let macyInstance;
+    const macyList = '[macy-list]';
+    const macyItem = '[macy-item]';
+    const loadingClass = 'is-loading';
+    const macyContainer = document.querySelector(macyList);
+    const filtersActive = macyContainer.hasAttribute('fs-cmsfilter-element');
+    console.log(filtersActive);
+    // exit if no list is found
+
+    const addBlur = function () {
+      const items = document.querySelectorAll(macyItem);
+      items.forEach((item) => {
+        if (!item || item.classList.contains(loadingClass)) return;
+        item.classList.add(loadingClass);
+      });
+    };
+    addBlur();
+
+    const removeBlur = function () {
+      const items = document.querySelectorAll(macyItem);
+      items.forEach((item) => {
+        if (!item || !item.classList.contains(loadingClass)) return;
+        item.classList.remove(loadingClass);
+      });
+    };
+
+    if (!macyContainer) return;
+    const createGrid = function () {
+      addBlur();
+      if (macyInstance) {
+        macyInstance.remove();
+      }
+      // macy instance
+      macyInstance = Macy({
+        container: macyList,
+        margin: 48,
+        columns: 3,
+        breakAt: {
+          991: 3,
+          767: 2,
+          479: 1,
+        },
+      });
+    };
+    // if filters are active wait for list instance to load before creating macy
+    if (filtersActive) {
+      // create the filters instance
+      window.fsAttributes = window.fsAttributes || [];
+      window.fsAttributes.push([
+        'cmsfilter',
+        (filterInstances) => {
+          const [filterInstance] = filterInstances;
+          // The `renderitems` event runs whenever the list renders items after filtering.
+          filterInstance.listInstance.on('renderitems', (renderedItems) => {
+            console.log('macy made');
+            createGrid();
+            removeBlur();
+          });
+        },
+      ]);
+    }
+    if (!filtersActive) {
+      createGrid();
+      removeBlur();
+    }
+  };
+
   // Run these scripts on page reset
-  const gsapInit = function (data) {
+  const gsapInit = function () {
     mm.add(
       {
         //This is the conditions object
@@ -261,6 +333,9 @@ document.addEventListener('DOMContentLoaded', function () {
       (context) => {
         let { isMobile, isTablet, isDesktop, reduceMotion } = context.conditions;
         // remove these animations if reduce motion is set
+        if (isDesktop || isTablet) {
+          macyGrid();
+        }
         if (!reduceMotion) {
           clipHovers();
         }
