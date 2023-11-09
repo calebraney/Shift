@@ -47,15 +47,15 @@ document.addEventListener('DOMContentLoaded', function () {
       },
     });
   };
-  // pageLoad();
-  const pageLoadFast = function () {
-    // Code that runs on pageload
-    gsap.set(`${LOAD_SQUARES}`, {
-      opacity: 0,
-    });
-    gsap.set(`${LOAD_GRID}`, { display: 'none' });
-  };
-  pageLoadFast();
+  pageLoad();
+  // const pageLoadFast = function () {
+  //   // Code that runs on pageload
+  //   gsap.set(`${LOAD_SQUARES}`, {
+  //     opacity: 0,
+  //   });
+  //   gsap.set(`${LOAD_GRID}`, { display: 'none' });
+  // };
+  // pageLoadFast();
   //////////////////////////////
   //LENIS Smoothscroll
   gsap.registerPlugin(ScrollTrigger);
@@ -116,18 +116,10 @@ document.addEventListener('DOMContentLoaded', function () {
         speed: 600,
         loop: true,
         drag: false,
-        // effect: 'coverflow',
         followFinger: false,
         freeMode: false,
-        slidesPerView: 'auto',
-        spaceBetween: '0%',
-        coverflowEffect: {
-          rotate: 45,
-          stretch: 0,
-          depth: 100,
-          modifier: 0.6,
-          slideShadows: false,
-        },
+        updateOnMove: true,
+        rewind: false,
         breakpoints: {
           480: {
             slidesPerView: 1,
@@ -175,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
         speed: 600,
         loop: true,
         clones: 2, // sets duplicates
-        updateOnMove: false, // affects timing
+        updateOnMove: true, // affects timing
         drag: true,
         followFinger: false,
         freeMode: false,
