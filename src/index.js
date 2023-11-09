@@ -3,6 +3,7 @@ import Lenis from '@studio-freight/lenis';
 import { attr } from './utilities';
 import { runSplit } from './utilities';
 import Macy from 'macy';
+import Swiper from 'swiper';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
@@ -46,8 +47,15 @@ document.addEventListener('DOMContentLoaded', function () {
       },
     });
   };
-
-  pageLoad();
+  // pageLoad();
+  const pageLoadFast = function () {
+    // Code that runs on pageload
+    gsap.set(`${LOAD_SQUARES}`, {
+      opacity: 0,
+    });
+    gsap.set(`${LOAD_GRID}`, { display: 'none' });
+  };
+  pageLoadFast();
   //////////////////////////////
   //LENIS Smoothscroll
   gsap.registerPlugin(ScrollTrigger);
@@ -89,6 +97,101 @@ document.addEventListener('DOMContentLoaded', function () {
   //   if (secondClick) stopScroll();
   //   else startScroll();
   // });
+
+  //////////////////////////////
+  // Swiper Sliders
+  const projectSlider = function () {
+    const sliderComponent = '.slider-project_component';
+    const sliderWrap = '.swiper';
+    const nextButton = '.swiper-next';
+    const previousButton = '.swiper-prev';
+    const activeClass = 'is-active';
+    const disabledClass = 'is-disabled';
+
+    document.querySelectorAll(sliderComponent).forEach(function (element) {
+      if (!element) return;
+      nextButtonEl = element.querySelector(nextButton);
+      previousButtonEl = element.querySelector(previousButton);
+      const swiper = new Swiper(element.querySelector(sliderWrap), {
+        speed: 600,
+        loop: true,
+        drag: false,
+        // effect: 'coverflow',
+        followFinger: false,
+        freeMode: false,
+        slidesPerView: 'auto',
+        spaceBetween: '0%',
+        coverflowEffect: {
+          rotate: 45,
+          stretch: 0,
+          depth: 100,
+          modifier: 0.6,
+          slideShadows: false,
+        },
+        breakpoints: {
+          480: {
+            slidesPerView: 1,
+            spaceBetween: '0%',
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: '0%',
+          },
+          992: {
+            slidesPerView: 3,
+            spaceBetween: '0%',
+          },
+        },
+        // navigation: {
+        //   nextEl: nextButtonEl,
+        //   prevEl: previousButtonEl,
+        //   disabledClass: disabledClass,
+        // },
+        slideActiveClass: activeClass,
+        slideDuplicateActiveClass: activeClass,
+      });
+      nextButtonEl.addEventListener('click', function () {
+        swiper.slideNext();
+      });
+      previousButtonEl.addEventListener('click', function () {
+        swiper.slidePrev();
+      });
+      // swiper.on('slideChange', function () {});
+    });
+  };
+
+  const homeHeroSlider = function () {
+    const sliderComponent = '.slider-home_component';
+    const sliderWrap = '.swiper';
+    const nextButton = '.swiper-next';
+    const previousButton = '.swiper-prev';
+    const activeClass = 'is-active';
+
+    document.querySelectorAll(sliderComponent).forEach(function (element) {
+      if (!element) return;
+      nextButtonEl = element.querySelector(nextButton);
+      previousButtonEl = element.querySelector(previousButton);
+      const swiper = new Swiper(element.querySelector(sliderWrap), {
+        speed: 600,
+        loop: true,
+        clones: 2, // sets duplicates
+        updateOnMove: false, // affects timing
+        drag: true,
+        followFinger: false,
+        freeMode: false,
+        slidesPerView: 1,
+        spaceBetween: '0px',
+        slideActiveClass: activeClass,
+        slideDuplicateActiveClass: activeClass,
+      });
+      nextButtonEl.addEventListener('click', function () {
+        swiper.slideNext();
+      });
+      previousButtonEl.addEventListener('click', function () {
+        swiper.slidePrev();
+      });
+    });
+  };
 
   //////////////////////////////
   // GSAP Animations
@@ -258,6 +361,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const macyItem = '[macy-item]';
     const loadingClass = 'is-loading';
     const macyContainer = document.querySelector(macyList);
+    if (!macyContainer) return;
     const filtersActive = macyContainer.hasAttribute('fs-cmsfilter-element');
     console.log(filtersActive);
     // exit if no list is found
@@ -333,6 +437,8 @@ document.addEventListener('DOMContentLoaded', function () {
       (context) => {
         let { isMobile, isTablet, isDesktop, reduceMotion } = context.conditions;
         // remove these animations if reduce motion is set
+        projectSlider();
+        homeHeroSlider();
         if (isDesktop || isTablet) {
           macyGrid();
         }
