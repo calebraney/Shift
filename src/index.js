@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
   pageLoad();
+
   // const pageLoadFast = function () {
   //   // Code that runs on pageload
   //   gsap.set(`${LOAD_SQUARES}`, {
@@ -56,6 +57,55 @@ document.addEventListener('DOMContentLoaded', function () {
   //   gsap.set(`${LOAD_GRID}`, { display: 'none' });
   // };
   // pageLoadFast();
+
+  // Page Transition
+  links.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      let parentPrevent = this.closest(LOAD_PREVENT_ATTR);
+      if (parentPrevent) {
+        let preventTransition = attr(false, parentPrevent.getAttribute('prevent-transition'));
+        console.log(`keep transition el = ${parentPrevent}`, preventTransition);
+      } else {
+        let preventTransition = false;
+      }
+
+      if (
+        this.hostname === window.location.host &&
+        this.href.indexOf('#') === -1 &&
+        this.target !== '_blank' &&
+        preventTransition === false
+      ) {
+        e.preventDefault();
+        console.log(preventTransition);
+        let destination = this.getAttribute('href');
+        let DURATION_MS = TRANSITION_DURATION * 1000 + 500;
+        gsap.set(`${LOAD_GRID}`, { display: 'grid' });
+        gsap.fromTo(
+          `${LOAD_SQUARES}`,
+          {
+            opacity: 0,
+          },
+          {
+            opacity: 1,
+            stagger: {
+              amount: 0.5,
+              duration: TRANSITION_DURATION,
+              ease: 'power1.out',
+              from: 'random',
+            }, //you can also try a from: "start" or "end" -- get creative!
+            onComplete: function () {
+              // console.log((window.location = destination));
+            },
+          }
+        );
+        setTimeout(function () {
+          console.log(DURATION_MS, 'out');
+          window.location = destination;
+        }, DURATION_MS);
+      }
+    });
+  });
+
   //////////////////////////////
   //LENIS Smoothscroll
   gsap.registerPlugin(ScrollTrigger);
@@ -193,47 +243,6 @@ document.addEventListener('DOMContentLoaded', function () {
   //   duration: 0.6,
   //   ease: 'power1.out',
   // });
-
-  // Page Transition
-  links.forEach(function (link) {
-    link.addEventListener('click', function (e) {
-      let keepTransition = attr(true, this.getAttribute(LOAD_PREVENT_ATTR));
-      if (
-        this.hostname === window.location.host &&
-        this.href.indexOf('#') === -1 &&
-        this.target !== '_blank' &&
-        keepTransition
-      ) {
-        e.preventDefault();
-        console.log(keepTransition);
-        let destination = this.getAttribute('href');
-        let DURATION_MS = TRANSITION_DURATION * 1000 + 500;
-        gsap.set(`${LOAD_GRID}`, { display: 'grid' });
-        gsap.fromTo(
-          `${LOAD_SQUARES}`,
-          {
-            opacity: 0,
-          },
-          {
-            opacity: 1,
-            stagger: {
-              amount: 0.5,
-              duration: TRANSITION_DURATION,
-              ease: 'power1.out',
-              from: 'random',
-            }, //you can also try a from: "start" or "end" -- get creative!
-            onComplete: function () {
-              // console.log((window.location = destination));
-            },
-          }
-        );
-        setTimeout(function () {
-          console.log(DURATION_MS, 'out');
-          window.location = destination;
-        }, DURATION_MS);
-      }
-    });
-  });
 
   const scrollTL = function (item) {
     // default GSAP options
@@ -403,7 +412,31 @@ document.addEventListener('DOMContentLoaded', function () {
           const [filterInstance] = filterInstances;
           // The `renderitems` event runs whenever the list renders items after filtering.
           filterInstance.listInstance.on('renderitems', (renderedItems) => {
-            console.log('macy made');
+            // console.log('macy created after filters');
+            setTimeout(function () {
+              console.log('timeout macy');
+              createGrid();
+              removeBlur();
+            }, 100);
+            // createGrid();
+            // removeBlur();
+          });
+        },
+      ]);
+      // load instance
+      window.fsAttributes.push([
+        'cmsload',
+        (listInstances) => {
+          // console.log('macy created after load instance');
+          // createGrid();
+          // removeBlur();
+
+          // The callback passes a `listInstances` array with all the `CMSList` instances on the page.
+          const [listInstance] = listInstances;
+
+          // The `renderitems` event runs whenever the list renders items after switching pages.
+          listInstance.on('renderitems', (renderedItems) => {
+            console.log('macy created after load');
             createGrid();
             removeBlur();
           });
