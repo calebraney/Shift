@@ -62,11 +62,9 @@ document.addEventListener('DOMContentLoaded', function () {
   links.forEach(function (link) {
     link.addEventListener('click', function (e) {
       let parentPrevent = this.closest(LOAD_PREVENT_ATTR);
+      let preventTransition = false;
       if (parentPrevent) {
-        let preventTransition = attr(false, parentPrevent.getAttribute('prevent-transition'));
-        console.log(`keep transition el = ${parentPrevent}`, preventTransition);
-      } else {
-        let preventTransition = false;
+        preventTransition = attr(false, parentPrevent.getAttribute('prevent-transition'));
       }
 
       if (
@@ -76,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
         preventTransition === false
       ) {
         e.preventDefault();
-        console.log(preventTransition);
         let destination = this.getAttribute('href');
         let DURATION_MS = TRANSITION_DURATION * 1000 + 500;
         gsap.set(`${LOAD_GRID}`, { display: 'grid' });
@@ -99,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         );
         setTimeout(function () {
-          console.log(DURATION_MS, 'out');
           window.location = destination;
         }, DURATION_MS);
       }
@@ -360,39 +356,20 @@ document.addEventListener('DOMContentLoaded', function () {
     let macyInstance;
     const macyList = '[macy-list]';
     const macyItem = '[macy-item]';
-    const loadingClass = 'is-loading';
     const macyContainer = document.querySelector(macyList);
     if (!macyContainer) return;
     const filtersActive = macyContainer.hasAttribute('fs-cmsfilter-element');
-    console.log(filtersActive);
     // exit if no list is found
-
-    const addBlur = function () {
-      const items = document.querySelectorAll(macyItem);
-      items.forEach((item) => {
-        if (!item || item.classList.contains(loadingClass)) return;
-        item.classList.add(loadingClass);
-      });
-    };
-    addBlur();
-
-    const removeBlur = function () {
-      const items = document.querySelectorAll(macyItem);
-      items.forEach((item) => {
-        if (!item || !item.classList.contains(loadingClass)) return;
-        item.classList.remove(loadingClass);
-      });
-    };
 
     if (!macyContainer) return;
     const createGrid = function () {
-      addBlur();
       if (macyInstance) {
         macyInstance.remove();
       }
       // macy instance
       macyInstance = Macy({
         container: macyList,
+        // waitForImages: false,
         margin: 48,
         columns: 3,
         breakAt: {
@@ -404,22 +381,23 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     // if filters are active wait for list instance to load before creating macy
     if (filtersActive) {
+      createGrid();
       // create the filters instance
       window.fsAttributes = window.fsAttributes || [];
       window.fsAttributes.push([
         'cmsfilter',
         (filterInstances) => {
+          // console.log('cmsfilter Successfully loaded!');
           const [filterInstance] = filterInstances;
           // The `renderitems` event runs whenever the list renders items after filtering.
           filterInstance.listInstance.on('renderitems', (renderedItems) => {
-            // console.log('macy created after filters');
+            console.log('macy created after filters');
+            // macyInstance.recalculate(true);
+            createGrid();
             setTimeout(function () {
-              console.log('timeout macy');
-              createGrid();
-              removeBlur();
-            }, 100);
-            // createGrid();
-            // removeBlur();
+              console.log('macy re-calculated after filters');
+              macyInstance.recalculate(true);
+            }, 300);
           });
         },
       ]);
@@ -427,26 +405,28 @@ document.addEventListener('DOMContentLoaded', function () {
       window.fsAttributes.push([
         'cmsload',
         (listInstances) => {
-          // console.log('macy created after load instance');
-          // createGrid();
-          // removeBlur();
-
           // The callback passes a `listInstances` array with all the `CMSList` instances on the page.
           const [listInstance] = listInstances;
-
           // The `renderitems` event runs whenever the list renders items after switching pages.
           listInstance.on('renderitems', (renderedItems) => {
-            console.log('macy created after load');
-            createGrid();
-            removeBlur();
+            console.log('macy re-caclulated after load');
+            macyInstance.recalculate(true);
           });
         },
       ]);
     }
     if (!filtersActive) {
       createGrid();
-      removeBlur();
+      setTimeout(function () {
+        console.log('macy re-calculated');
+        macyInstance.recalculate(true);
+      }, 400);
     }
+    //recalculate after images are loaded
+    document.addEventListener('load', () => {
+      console.log('load');
+      macyInstance.recalculate(true);
+    });
   };
 
   // Run these scripts on page reset
