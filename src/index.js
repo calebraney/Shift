@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // define variable for global use
   let mm = gsap.matchMedia();
 
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(Flip);
+  gsap.registerPlugin(TextPlugin);
+
   const links = document.querySelectorAll('a');
   const pageWrapper = document.querySelector('.page-wrapper');
   const pageMain = document.querySelector('.main-wrapper');
@@ -104,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   //////////////////////////////
   //LENIS Smoothscroll
-  gsap.registerPlugin(ScrollTrigger);
 
   const lenis = new Lenis({
     duration: 1,
@@ -234,11 +237,77 @@ document.addEventListener('DOMContentLoaded', function () {
   //////////////////////////////
   // GSAP Animations
 
-  //set global interaction defaults
-  // gsap.defaults({
-  //   duration: 0.6,
-  //   ease: 'power1.out',
-  // });
+  const navNews = function () {
+    const navMarquees = document.querySelectorAll('[nav-marquee]');
+    if (navMarquees.length === 0) return;
+
+    navMarquees.forEach(function (marquee) {
+      let track = marquee.querySelector('[nav-marquee-track]');
+      let items = marquee.querySelectorAll('[nav-marquee-item]');
+      if (!track || items.length === 0) return;
+      let tl = gsap.timeline({
+        repeat: -1,
+        defaults: { ease: 'expo.inOut', duration: 1, delay: 1 },
+      });
+
+      items.forEach(function (item, index) {
+        let distance = (index + 1) * -100;
+        tl.to(track, { yPercent: distance });
+      });
+
+      let clonedItem = items[0].cloneNode(true);
+      track.appendChild(clonedItem);
+    });
+  };
+
+  function homeHeroText() {
+    console.log('hero text');
+    const words = gsap.utils.toArray('[hero-text-item]');
+    const textBox = document.querySelector('#hero-text-box');
+    const textLine = document.querySelector('#hero-text-line');
+    const activeClass = 'is-active';
+    const updateLine = function () {
+      console.log('add');
+      textLine.classList.add(activeClass);
+      setTimeout(function () {
+        console.log('remove');
+        textLine.classList.remove(activeClass);
+      }, 3000);
+    };
+    const removeLine = function () {};
+    if (!textBox || words.length === 0) return;
+    let tlHomeText = gsap.timeline({ repeat: -1, delay: 0 });
+    tlHomeText.set(textBox, {
+      text: '',
+      duration: 1,
+    });
+
+    words.forEach((word, i) => {
+      if (i != 0) {
+        let tlText = gsap.timeline({
+          repeat: 1,
+          yoyo: true,
+          repeatDelay: 2,
+          onStart: updateLine,
+        });
+        tlText.to(textBox, { duration: 1, text: word.outerText });
+        tlHomeText.add(tlText);
+      }
+    });
+
+    let tlLastText = gsap.timeline({
+      repeat: 1,
+      yoyo: true,
+      repeatDelay: 2,
+      onStart: updateLine,
+    });
+    tlLastText.to(textBox, {
+      duration: 1,
+      text: words[0].outerText,
+      onStart: updateLine,
+    });
+    tlHomeText.add(tlLastText);
+  }
 
   const scrollTL = function (item) {
     // default GSAP options
@@ -439,6 +508,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // remove these animations if reduce motion is set
         projectSlider();
         homeHeroSlider();
+        navNews();
+        homeHeroText();
         if (isDesktop || isTablet) {
           macyGrid();
         }
