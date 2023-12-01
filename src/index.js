@@ -32,9 +32,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const resetGSAPTriggers = document.querySelectorAll('[gsap-reset]');
   // const LOAD_H1 = '[gsap-load="h1"]';
   // const LOAD_EL = '[gsap-load="el"]';
-  // const SCROLL_HEADING = '[gsap-scroll="heading"]';
-  // const SCROLL_EL = '[gsap-scroll="el"]';
-  // const SCROLL_CONTAINER = '[gsap-scroll="container"]';
+  const SCROLL_HEADING = '[gsap-scroll="heading"]';
+  const SCROLL_EL = '[gsap-scroll="el"]';
+  const SCROLL_CONTAINER = '[gsap-scroll="container"]';
+  const SCROLL_STAGGER = '[gsap-scroll="stagger"]';
   // const SCROLL_LINE = '[gsap-scroll="line"';
   // const SCROLL_NUMBER = '[gsap-scroll="number"';
   // const SCROLL_REFRESH = '[scrolltrigger-refresh]';
@@ -126,14 +127,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!ScrollTrigger) return;
     ScrollTrigger.update();
   });
-  // On first click of nav stop scrolling
-  function stopScroll() {
-    lenis.stop();
-  }
-  // On second click of nav start scrolling
-  function startScroll() {
-    lenis.start();
-  }
 
   // allow scrolling on overflow elements
   //document.querySelector('.over--scroll').setAttribute("onwheel", "event.stopPropagation()");
@@ -157,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const activeClass = 'is-active';
     const disabledClass = 'is-disabled';
 
-    document.querySelectorAll(sliderComponent).forEach(function (element) {
+    gsap.utils.toArray(sliderComponent).forEach(function (element) {
       if (!element) return;
       nextButtonEl = element.querySelector(nextButton);
       previousButtonEl = element.querySelector(previousButton);
@@ -208,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const previousButton = '.swiper-prev';
     const activeClass = 'is-active';
 
-    document.querySelectorAll(sliderComponent).forEach(function (element) {
+    gsap.utils.toArray(sliderComponent).forEach(function (element) {
       if (!element) return;
       nextButtonEl = element.querySelector(nextButton);
       previousButtonEl = element.querySelector(previousButton);
@@ -238,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // GSAP Animations
 
   const navNews = function () {
-    const navMarquees = document.querySelectorAll('[nav-marquee]');
+    const navMarquees = gsap.utils.toArray('[nav-marquee]');
     if (navMarquees.length === 0) return;
 
     navMarquees.forEach(function (marquee) {
@@ -261,20 +254,18 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   function homeHeroText() {
-    console.log('hero text');
     const words = gsap.utils.toArray('[hero-text-item]');
     const textBox = document.querySelector('#hero-text-box');
     const textLine = document.querySelector('#hero-text-line');
     const activeClass = 'is-active';
     const updateLine = function () {
-      console.log('add');
-      textLine.classList.add(activeClass);
       setTimeout(function () {
-        console.log('remove');
+        textLine.classList.add(activeClass);
+      }, 500);
+      setTimeout(function () {
         textLine.classList.remove(activeClass);
       }, 3000);
     };
-    const removeLine = function () {};
     if (!textBox || words.length === 0) return;
     let tlHomeText = gsap.timeline({ repeat: -1, delay: 0 });
     tlHomeText.set(textBox, {
@@ -311,27 +302,117 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const scrollTL = function (item) {
     // default GSAP options
-    const defaults = {
+    const settings = {
+      scrub: false,
       toggleActions: 'play none none none',
-      scrub: true,
       start: 'top 90%',
       end: 'top 75%',
     };
-    //override defaults if an attribute is present and a valid type.
-    defaults.toggleActions = attr(defaults.toggleActions, item.getAttribute('gsap-toggle-actions'));
-    defaults.scrub = attr(defaults.scrub, item.getAttribute('gsap-scrub'));
-    defaults.start = attr(defaults.start, item.getAttribute('gsap-scroll-start'));
-    defaults.end = attr(defaults.end, item.getAttribute('gsap-scroll-end'));
+    //override settings if an attribute is present and a valid type.
+    settings.toggleActions = attr(settings.toggleActions, item.getAttribute('gsap-toggle-actions'));
+    settings.scrub = attr(settings.scrub, item.getAttribute('gsap-scrub'));
+    settings.start = attr(settings.start, item.getAttribute('gsap-scroll-start'));
+    settings.end = attr(settings.end, item.getAttribute('gsap-scroll-end'));
     const tl = gsap.timeline({
+      defaults: {
+        duration: 0.6,
+        ease: 'power1.out',
+      },
       scrollTrigger: {
         trigger: item,
-        start: defaults.start,
-        end: defaults.end,
-        toggleActions: defaults.scrub ? 'none none none none' : defaults.toggleActions,
-        scrub: defaults.scrub ? 0.5 : false,
+        start: settings.start,
+        end: settings.end,
+        toggleActions: settings.toggleActions,
+        scrub: settings.scrub,
       },
     });
     return tl;
+  };
+
+  const scrollHeading = function () {
+    const items = gsap.utils.toArray(SCROLL_HEADING);
+    items.forEach((item) => {
+      const splitText = runSplit(item);
+      if (!splitText) return;
+      item.style.opacity = 1;
+      const tl = scrollTL(item);
+      tl.fromTo(
+        splitText.words,
+        {
+          opacity: 0,
+          x: '2rem',
+        },
+        {
+          opacity: 1,
+          x: '0rem',
+          stagger: { each: 0.2, from: 'start' },
+        }
+      );
+    });
+  };
+
+  const scrollEl = function () {
+    const items = gsap.utils.toArray(SCROLL_EL);
+    items.forEach((item) => {
+      if (!item) return;
+      item.style.opacity = 1;
+      const tl = scrollTL(item);
+      tl.fromTo(
+        item,
+        {
+          opacity: 0,
+          x: '2rem',
+        },
+        {
+          opacity: 1,
+          x: '0rem',
+        }
+      );
+    });
+  };
+
+  const scrollContainer = function () {
+    const items = gsap.utils.toArray(SCROLL_CONTAINER);
+    items.forEach((item) => {
+      if (!item) return;
+      const children = gsap.utils.toArray(item.children);
+      if (children.length === 0) return;
+      children.forEach((child) => {
+        const tl = scrollTL(child);
+        tl.fromTo(
+          child,
+          {
+            opacity: 0,
+            y: '2rem',
+          },
+          {
+            opacity: 1,
+            y: '0rem',
+          }
+        );
+      });
+    });
+  };
+
+  const scrollStagger = function () {
+    const items = gsap.utils.toArray(SCROLL_STAGGER);
+    items.forEach((item) => {
+      const children = gsap.utils.toArray(item.children);
+      if (children.length === 0) return;
+      const tl = scrollTL(item);
+      tl.fromTo(
+        children,
+        {
+          opacity: 0,
+          y: '2rem',
+        },
+        {
+          opacity: 1,
+          y: '0rem',
+          stagger: { each: 0.1, from: 'start' },
+        }
+      );
+    });
   };
 
   // Clip Hover Animation
@@ -515,6 +596,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         if (!reduceMotion) {
           clipHovers();
+          scrollHeading();
+          scrollEl();
+          scrollContainer();
+          scrollStagger();
         }
       }
     );

@@ -1,3 +1,5 @@
+import SplitType from 'split-type';
+
 // attribute value checker
 export const attr = function (defaultVal, attrVal) {
   const defaultValType = typeof defaultVal;
@@ -11,6 +13,7 @@ export const attr = function (defaultVal, attrVal) {
 
 //split text utility
 export const runSplit = function (text) {
+  if (!text) return;
   typeSplit = new SplitType(text, {
     types: 'lines, words',
   });
