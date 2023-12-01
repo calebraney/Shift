@@ -4,7 +4,7 @@ await esbuild
   .build({
     entryPoints: ['src/index.js'],
     bundle: true,
-    minify: false,
+    minify: true,
     watch: true,
     sourcemap: false,
     outdir: 'dist/',
