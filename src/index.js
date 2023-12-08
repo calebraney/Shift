@@ -194,6 +194,47 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
 
+  const projectGallerySlider = function () {
+    const sliderComponent = '.slider-gallery_component';
+    const sliderWrap = '.swiper';
+    const nextButton = '.swiper-next';
+    const previousButton = '.swiper-prev';
+    const activeClass = 'is-active';
+    const disabledClass = 'is-disabled';
+
+    gsap.utils.toArray(sliderComponent).forEach(function (element) {
+      if (!element) return;
+      nextButtonEl = element.querySelector(nextButton);
+      previousButtonEl = element.querySelector(previousButton);
+      const swiper = new Swiper(element.querySelector(sliderWrap), {
+        speed: 600,
+        loop: true,
+        slidesPerView: 'auto',
+        centeredSlides: true,
+        spaceBetween: '5%',
+        initialSlide: 0,
+        // clones: 2, // sets duplicates
+        updateOnMove: true, // affects timing
+        // autoplay: {
+        //   delay: 4000,
+        // },
+        drag: true,
+        followFinger: false,
+        freeMode: false,
+        rewind: false,
+        slideActiveClass: activeClass,
+        slideDuplicateActiveClass: activeClass,
+      });
+      nextButtonEl.addEventListener('click', function () {
+        swiper.slideNext();
+      });
+      previousButtonEl.addEventListener('click', function () {
+        swiper.slidePrev();
+      });
+      // swiper.on('slideChange', function () {});
+    });
+  };
+
   const homeHeroSlider = function () {
     const sliderComponent = '.slider-home_component';
     const sliderWrap = '.swiper';
@@ -589,6 +630,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // remove these animations if reduce motion is set
         projectSlider();
         homeHeroSlider();
+        projectGallerySlider();
         navNews();
         homeHeroText();
         if (isDesktop || isTablet) {
