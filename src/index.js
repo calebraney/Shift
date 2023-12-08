@@ -36,6 +36,13 @@ document.addEventListener('DOMContentLoaded', function () {
   const SCROLL_EL = '[gsap-scroll="el"]';
   const SCROLL_CONTAINER = '[gsap-scroll="container"]';
   const SCROLL_STAGGER = '[gsap-scroll="stagger"]';
+  const LOAD_H1 = '[gsap-load="h1"]';
+  const LOAD_H2 = '[gsap-load="h2"]';
+  const LOAD_ICON = '[gsap-load="icon"]';
+  const LOAD_H2_WRAP = '[gsap-load="h2-wrap"]';
+  const LOAD_ICON_WRAP = '[gsap-load="icon-wrap"]';
+  const LOAD_TEXTURE = '[gsap-load="texture"]';
+
   // const SCROLL_LINE = '[gsap-scroll="line"';
   // const SCROLL_NUMBER = '[gsap-scroll="number"';
   // const SCROLL_REFRESH = '[scrolltrigger-refresh]';
@@ -47,6 +54,10 @@ document.addEventListener('DOMContentLoaded', function () {
     gsap.to(`${LOAD_SQUARES}`, {
       opacity: 0,
       stagger: { amount: 0.5, duration: TRANSITION_DURATION, ease: 'power1.out', from: 'random' },
+      onStart: () => {
+        loadHome();
+        loadHeader();
+      },
       onComplete: () => {
         gsap.set(`${LOAD_GRID}`, { display: 'none' });
       },
@@ -270,6 +281,189 @@ document.addEventListener('DOMContentLoaded', function () {
 
   //////////////////////////////
   // GSAP Animations
+
+  const loadHeader = function () {
+    const component = document.querySelector('[gsap-load="header"]');
+    const h1 = document.querySelector(LOAD_H1);
+    const h2 = document.querySelector(LOAD_H2);
+    const h2WRap = document.querySelector(LOAD_H2_WRAP);
+    const icon = document.querySelector(LOAD_ICON);
+    const iconWrap = document.querySelector(LOAD_ICON_WRAP);
+    const texture = document.querySelector(LOAD_TEXTURE);
+
+    if (!component) return;
+
+    const h1Text = runSplit(h1);
+    const h2Text = runSplit(h2);
+    const tl = gsap.timeline({
+      delay: 0.4,
+      defaults: {
+        duration: 0.8,
+        ease: 'power2.out',
+      },
+    });
+    tl.set(component, { opacity: 1 });
+    tl.fromTo(
+      texture,
+      {
+        x: '110%',
+      },
+      {
+        x: '0%',
+        duration: 0.6,
+      }
+    );
+    tl.fromTo(
+      iconWrap,
+      {
+        x: '-110%',
+      },
+      {
+        x: '0%',
+        duration: 0.6,
+      },
+      '<.1'
+    );
+    tl.fromTo(
+      h2WRap,
+      {
+        y: '110%',
+      },
+      {
+        y: '0%',
+        duration: 0.6,
+      },
+      '<.1'
+    );
+    tl.fromTo(
+      h1Text.words,
+      {
+        opacity: 0,
+        rotateZ: -3,
+        x: '2rem',
+      },
+      {
+        opacity: 1,
+        rotateZ: 0,
+        x: '0rem',
+        stagger: { each: 0.1, from: 'start' },
+      },
+      '<.3'
+    );
+    tl.fromTo(
+      icon,
+      {
+        opacity: 0,
+        rotateZ: 20,
+        scale: 0.5,
+      },
+      {
+        opacity: 1,
+        rotateZ: 0,
+        scale: 1,
+      },
+      '<.3'
+    );
+    tl.fromTo(
+      h2Text.lines,
+      {
+        opacity: 0,
+        rotateZ: -3,
+        y: '2rem',
+      },
+      {
+        opacity: 1,
+        y: '0rem',
+        rotateZ: 0,
+        stagger: { each: 0.1, from: 'start' },
+      },
+      '<.3'
+    );
+  };
+  const loadHome = function () {
+    const component = document.querySelector('[gsap-load="home"]');
+    const h1 = document.querySelectorAll(LOAD_H1);
+    const h2 = document.querySelector(LOAD_H2);
+    const h2WRap = document.querySelector(LOAD_H2_WRAP);
+    const callout = document.querySelector('[gsap-load="callout"]');
+    const slider = document.querySelector('[gsap-load="slider"]');
+    console.log(h2);
+
+    if (!component) return;
+
+    const tl = gsap.timeline({
+      delay: 0.4,
+      defaults: {
+        duration: 0.8,
+        ease: 'power2.out',
+      },
+    });
+    tl.set(component, { opacity: 1 });
+    tl.fromTo(
+      h2WRap,
+      {
+        x: '-110%',
+      },
+      {
+        x: '0%',
+        duration: 0.6,
+      }
+    );
+    tl.fromTo(
+      slider,
+      {
+        y: '110%',
+      },
+      {
+        y: '0%',
+        duration: 0.6,
+      },
+      '<.1'
+    );
+    tl.fromTo(
+      h1,
+      {
+        opacity: 0,
+        rotateZ: -3,
+        x: '2rem',
+      },
+      {
+        opacity: 1,
+        rotateZ: 0,
+        x: '0rem',
+        stagger: { each: 0.1, from: 'start' },
+      },
+      '<.3'
+    );
+    tl.fromTo(
+      h2,
+      {
+        opacity: 0,
+        rotateZ: -3,
+        y: '2rem',
+      },
+      {
+        opacity: 1,
+        y: '0rem',
+        rotateZ: 0,
+      },
+      '<.3'
+    );
+    tl.fromTo(
+      callout,
+      {
+        opacity: 0,
+        rotateZ: 20,
+        scale: 0.5,
+      },
+      {
+        opacity: 1,
+        rotateZ: 0,
+        scale: 1,
+      },
+      '<.3'
+    );
+  };
 
   const navNews = function () {
     const navMarquees = gsap.utils.toArray('[nav-marquee]');
