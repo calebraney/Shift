@@ -301,6 +301,10 @@ document.addEventListener('DOMContentLoaded', function () {
         duration: 0.8,
         ease: 'power2.out',
       },
+      onComplete: () => {
+        h1Text.revert();
+        h2Text.revert();
+      },
     });
     tl.set(component, { opacity: 1 });
     tl.fromTo(
@@ -387,10 +391,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const h2WRap = document.querySelector(LOAD_H2_WRAP);
     const callout = document.querySelector('[gsap-load="callout"]');
     const slider = document.querySelector('[gsap-load="slider"]');
-    console.log(h2);
-
     if (!component) return;
-
     const tl = gsap.timeline({
       delay: 0.4,
       defaults: {
@@ -581,6 +582,9 @@ document.addEventListener('DOMContentLoaded', function () {
           opacity: 1,
           x: '0rem',
           stagger: { each: 0.2, from: 'start' },
+          onComplete: () => {
+            splitText.revert();
+          },
         }
       );
     });
