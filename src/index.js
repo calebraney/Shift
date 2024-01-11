@@ -246,7 +246,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
   const projectGalleryCards = function () {
-    console.log('new animation');
     const containers = document.querySelectorAll('.related-project_list');
     const ACTIVE_CLASS = 'is-active';
     containers.forEach(function (container) {
