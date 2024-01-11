@@ -162,9 +162,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const disabledClass = 'is-disabled';
 
     gsap.utils.toArray(sliderComponent).forEach(function (element) {
-      if (!element) return;
       nextButtonEl = element.querySelector(nextButton);
       previousButtonEl = element.querySelector(previousButton);
+      if (!element || !nextButtonEl || !previousButtonEl) return;
       const swiper = new Swiper(element.querySelector(sliderWrap), {
         speed: 600,
         loop: true,
