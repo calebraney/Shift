@@ -667,11 +667,11 @@ document.addEventListener('DOMContentLoaded', function () {
         rotateZ: 20,
         scale: 0.5,
       },
-      // {
-      //   opacity: 1,
-      //   rotateZ: 4,
-      //   scale: 1,
-      // },
+      {
+        opacity: 1,
+        rotateZ: 4,
+        scale: 1,
+      },
       '<.3'
     );
   };
