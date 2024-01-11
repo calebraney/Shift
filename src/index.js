@@ -1066,12 +1066,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // this was causing long text to flicker during resizing so I tried turning it off, can turn it back on again if needed
   // Update on window resize
-  let windowWidth = window.innerWidth;
-  window.addEventListener('resize', function () {
-    if (window.innerWidth !== windowWidth) {
-      windowWidth = window.innerWidth;
-      gsap.matchMediaRefresh();
-    }
-  });
-});
+//   let windowWidth = window.innerWidth;
+//   window.addEventListener('resize', function () {
+//     if (window.innerWidth !== windowWidth) {
+//       windowWidth = window.innerWidth;
+//       gsap.matchMediaRefresh();
+//     }
+//   });
+// });
