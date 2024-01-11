@@ -661,18 +661,18 @@ document.addEventListener('DOMContentLoaded', function () {
       },
       '<.3'
     );
-    tl.fromTo(
+    tl.from(
       callout,
       {
         opacity: 0,
         rotateZ: 20,
         scale: 0.5,
       },
-      {
-        opacity: 1,
-        rotateZ: 0,
-        scale: 1,
-      },
+      // {
+      //   opacity: 1,
+      //   rotateZ: 4,
+      //   scale: 1,
+      // },
       '<.3'
     );
   };
@@ -1068,11 +1068,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // this was causing long text to flicker during resizing so I tried turning it off, can turn it back on again if needed
   // Update on window resize
-//   let windowWidth = window.innerWidth;
-//   window.addEventListener('resize', function () {
-//     if (window.innerWidth !== windowWidth) {
-//       windowWidth = window.innerWidth;
-//       gsap.matchMediaRefresh();
-//     }
-//   });
-// });
+  //   let windowWidth = window.innerWidth;
+  //   window.addEventListener('resize', function () {
+  //     if (window.innerWidth !== windowWidth) {
+  //       windowWidth = window.innerWidth;
+  //       gsap.matchMediaRefresh();
+  //     }
+  //   });
+});
