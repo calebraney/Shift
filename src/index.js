@@ -959,7 +959,6 @@ document.addEventListener('DOMContentLoaded', function () {
       let durationModifier = attr(2, component.getAttribute('gsap-logos-duration'));
       let firstListChildren = gsap.utils.toArray(lists[0].children);
       let itemCount = firstListChildren.length;
-      console.log(itemCount);
       const tl = gsap.timeline({
         repeat: -1,
       });
