@@ -948,6 +948,35 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
 
+  const logoMarquee = function () {
+    const COMPONENTS = '[gsap-logos="component"]';
+    const LIST = '[gsap-logos="list"]';
+    const components = gsap.utils.toArray(COMPONENTS);
+    components.forEach((component) => {
+      const lists = gsap.utils.toArray(component.querySelectorAll(LIST));
+      if (lists.length === 0) return;
+      // set a default duration per item and check for an attribute on the component to override it
+      let durationModifier = attr(2, component.getAttribute('gsap-logos-duration'));
+      let firstListChildren = gsap.utils.toArray(lists[0].children);
+      let itemCount = firstListChildren.length;
+      console.log(itemCount);
+      const tl = gsap.timeline({
+        repeat: -1,
+      });
+      tl.fromTo(
+        lists,
+        {
+          xPercent: 0,
+        },
+        {
+          xPercent: -100,
+          duration: durationModifier * itemCount,
+          ease: 'none',
+        }
+      );
+    });
+  };
+
   //////////////////////////////
   //Macy JS Grid
 
@@ -962,6 +991,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!macyContainer) return;
     const createGrid = function () {
+      // console.log('grid created');
       if (macyInstance) {
         macyInstance.remove();
       }
@@ -978,6 +1008,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
       });
     };
+
     // if filters are active wait for list instance to load before creating macy
     if (filtersActive) {
       createGrid();
@@ -993,6 +1024,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // macyInstance.recalculate(true);
             createGrid();
             setTimeout(function () {
+              // console.log('grid recalculated (filters)');
               macyInstance.recalculate(true);
             }, 300);
           });
@@ -1006,6 +1038,7 @@ document.addEventListener('DOMContentLoaded', function () {
           const [listInstance] = listInstances;
           // The `renderitems` event runs whenever the list renders items after switching pages.
           listInstance.on('renderitems', (renderedItems) => {
+            // console.log('grid recalculated (load)');
             macyInstance.recalculate(true);
           });
         },
@@ -1014,11 +1047,13 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!filtersActive) {
       createGrid();
       setTimeout(function () {
+        // console.log('grid recalculated (no filters)');
         macyInstance.recalculate(true);
       }, 400);
     }
     //recalculate after images are loaded
     document.addEventListener('load', () => {
+      // console.log('grid recalculated (load)');
       macyInstance.recalculate(true);
     });
   };
@@ -1041,6 +1076,7 @@ document.addEventListener('DOMContentLoaded', function () {
         projectGallerySlider();
         navNews();
         homeHeroText();
+        logoMarquee();
         if (isDesktop || isTablet) {
           macyGrid();
           // projectGalleryCardsOld();
