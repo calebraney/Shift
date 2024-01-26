@@ -272,7 +272,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     gsap.utils.toArray(sliderComponent).forEach(function (element) {
       if (!element) return;
-      console.log('autoplay 2');
       nextButtonEl = element.querySelector(nextButton);
       previousButtonEl = element.querySelector(previousButton);
       const swiper = new Swiper(element.querySelector(sliderWrap), {
