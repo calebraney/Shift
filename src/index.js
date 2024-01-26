@@ -4,6 +4,7 @@ import { attr } from './utilities';
 import { runSplit } from './utilities';
 import Macy from 'macy';
 import Swiper from 'swiper';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
@@ -153,8 +154,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   //////////////////////////////
   // Swiper Sliders
+  const sliderComponent = '.slider-project_component';
   const projectSlider = function () {
-    const sliderComponent = '.slider-project_component';
     const sliderWrap = '.swiper';
     const nextButton = '.swiper-next';
     const previousButton = '.swiper-prev';
@@ -166,6 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
       previousButtonEl = element.querySelector(previousButton);
       if (!element || !nextButtonEl || !previousButtonEl) return;
       const swiper = new Swiper(element.querySelector(sliderWrap), {
+        modules: [Navigation, Pagination],
         speed: 600,
         loop: true,
         drag: false,
@@ -187,21 +189,13 @@ document.addEventListener('DOMContentLoaded', function () {
             spaceBetween: '0%',
           },
         },
-        // navigation: {
-        //   nextEl: nextButtonEl,
-        //   prevEl: previousButtonEl,
-        //   disabledClass: disabledClass,
-        // },
+        navigation: {
+          nextEl: nextButtonEl,
+          prevEl: previousButtonEl,
+        },
         slideActiveClass: activeClass,
         slideDuplicateActiveClass: activeClass,
       });
-      nextButtonEl.addEventListener('click', function () {
-        swiper.slideNext();
-      });
-      previousButtonEl.addEventListener('click', function () {
-        swiper.slidePrev();
-      });
-      // swiper.on('slideChange', function () {});
     });
   };
 
@@ -218,6 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
       nextButtonEl = element.querySelector(nextButton);
       previousButtonEl = element.querySelector(previousButton);
       const swiper = new Swiper(element.querySelector(sliderWrap), {
+        modules: [Navigation, Pagination],
         speed: 600,
         loop: true,
         slidesPerView: 'auto',
@@ -226,23 +221,17 @@ document.addEventListener('DOMContentLoaded', function () {
         initialSlide: 0,
         // clones: 2, // sets duplicates
         updateOnMove: true, // affects timing
-        // autoplay: {
-        //   delay: 4000,
-        // },
         drag: true,
         followFinger: false,
         freeMode: false,
         rewind: false,
+        navigation: {
+          nextEl: nextButtonEl,
+          prevEl: previousButtonEl,
+        },
         slideActiveClass: activeClass,
         slideDuplicateActiveClass: activeClass,
       });
-      nextButtonEl.addEventListener('click', function () {
-        swiper.slideNext();
-      });
-      previousButtonEl.addEventListener('click', function () {
-        swiper.slidePrev();
-      });
-      // swiper.on('slideChange', function () {});
     });
   };
   const projectGalleryCards = function () {
@@ -283,10 +272,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     gsap.utils.toArray(sliderComponent).forEach(function (element) {
       if (!element) return;
+      console.log('autoplay 2');
       nextButtonEl = element.querySelector(nextButton);
       previousButtonEl = element.querySelector(previousButton);
       const swiper = new Swiper(element.querySelector(sliderWrap), {
+        modules: [Navigation, Pagination, Autoplay],
         speed: 600,
+        autoplay: {
+          delay: 3000,
+        },
         loop: true,
         clones: 2, // sets duplicates
         updateOnMove: true, // affects timing
@@ -295,14 +289,12 @@ document.addEventListener('DOMContentLoaded', function () {
         freeMode: false,
         slidesPerView: 1,
         spaceBetween: '0px',
+        navigation: {
+          nextEl: nextButtonEl,
+          prevEl: previousButtonEl,
+        },
         slideActiveClass: activeClass,
         slideDuplicateActiveClass: activeClass,
-      });
-      nextButtonEl.addEventListener('click', function () {
-        swiper.slideNext();
-      });
-      previousButtonEl.addEventListener('click', function () {
-        swiper.slidePrev();
       });
     });
   };
