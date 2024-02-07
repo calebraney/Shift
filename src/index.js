@@ -794,7 +794,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!macyContainer) return;
     const createGrid = function () {
-      // console.log('grid created');
       if (macyInstance) {
         macyInstance.remove();
       }
@@ -820,14 +819,13 @@ document.addEventListener('DOMContentLoaded', function () {
       window.fsAttributes.push([
         'cmsfilter',
         (filterInstances) => {
-          // console.log('cmsfilter Successfully loaded!');
+          // cmsfilter Successfully loaded
           const [filterInstance] = filterInstances;
           // The `renderitems` event runs whenever the list renders items after filtering.
           filterInstance.listInstance.on('renderitems', (renderedItems) => {
             // macyInstance.recalculate(true);
             createGrid();
             setTimeout(function () {
-              // console.log('grid recalculated (filters)');
               macyInstance.recalculate(true);
             }, 300);
           });
@@ -841,7 +839,6 @@ document.addEventListener('DOMContentLoaded', function () {
           const [listInstance] = listInstances;
           // The `renderitems` event runs whenever the list renders items after switching pages.
           listInstance.on('renderitems', (renderedItems) => {
-            // console.log('grid recalculated (load)');
             macyInstance.recalculate(true);
           });
         },
@@ -850,13 +847,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!filtersActive) {
       createGrid();
       setTimeout(function () {
-        // console.log('grid recalculated (no filters)');
         macyInstance.recalculate(true);
       }, 400);
     }
     //recalculate after images are loaded
     document.addEventListener('load', () => {
-      // console.log('grid recalculated (load)');
       macyInstance.recalculate(true);
     });
   };
