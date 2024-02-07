@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const LOAD_GRID = '.load_grid';
   const LOAD_SQUARES = '.load_grid-item';
   const LOAD_PREVENT_ATTR = '[prevent-transition]';
-  const TRANSITION_DURATION = 0.3;
+  const TRANSITION_DURATION = 0.45;
 
   //GSAP Selectors
   const resetGSAPTriggers = document.querySelectorAll('[gsap-reset]');
@@ -53,8 +53,14 @@ document.addEventListener('DOMContentLoaded', function () {
   const pageLoad = function () {
     // Code that runs on pageload
     gsap.to(`${LOAD_SQUARES}`, {
+      delay: 0.15,
       opacity: 0,
-      stagger: { amount: 0.5, duration: TRANSITION_DURATION, ease: 'power1.out', from: 'random' },
+      stagger: {
+        amount: TRANSITION_DURATION,
+        // duration: TRANSITION_DURATION / 2,
+        ease: 'power2.out',
+        from: 'random',
+      },
       onStart: () => {
         loadHome();
         loadHeader();
@@ -66,15 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
   };
   pageLoad();
 
-  // const pageLoadFast = function () {
-  //   // Code that runs on pageload
-  //   gsap.set(`${LOAD_SQUARES}`, {
-  //     opacity: 0,
-  //   });
-  //   gsap.set(`${LOAD_GRID}`, { display: 'none' });
-  // };
-  // pageLoadFast();
-
   // Page Transition
   links.forEach(function (link) {
     link.addEventListener('click', function (e) {
@@ -83,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (parentPrevent) {
         preventTransition = attr(false, parentPrevent.getAttribute('prevent-transition'));
       }
-
+      // stop page transition
       if (
         this.hostname === window.location.host &&
         this.href.indexOf('#') === -1 &&
@@ -92,7 +89,6 @@ document.addEventListener('DOMContentLoaded', function () {
       ) {
         e.preventDefault();
         let destination = this.getAttribute('href');
-        let DURATION_MS = TRANSITION_DURATION * 1000 + 500;
         gsap.set(`${LOAD_GRID}`, { display: 'grid' });
         gsap.fromTo(
           `${LOAD_SQUARES}`,
@@ -102,19 +98,18 @@ document.addEventListener('DOMContentLoaded', function () {
           {
             opacity: 1,
             stagger: {
-              amount: 0.5,
-              duration: TRANSITION_DURATION,
-              ease: 'power1.out',
+              amount: TRANSITION_DURATION,
+              // duration: TRANSITION_DURATION,
+              ease: 'power2.out',
               from: 'random',
             }, //you can also try a from: "start" or "end" -- get creative!
             onComplete: function () {
-              // console.log((window.location = destination));
+              setTimeout(function () {
+                window.location = destination;
+              }, 100);
             },
           }
         );
-        setTimeout(function () {
-          window.location = destination;
-        }, DURATION_MS);
       }
     });
   });
@@ -315,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const h1Text = runSplit(h1);
     const h2Text = runSplit(h2);
     const tl = gsap.timeline({
-      delay: 0.4,
+      delay: TRANSITION_DURATION - 0.3,
       defaults: {
         duration: 0.8,
         ease: 'power2.out',
@@ -412,7 +407,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const slider = document.querySelector('[gsap-load="slider"]');
     if (!component) return;
     const tl = gsap.timeline({
-      delay: 0.4,
+      delay: TRANSITION_DURATION - 0.3,
       defaults: {
         duration: 0.8,
         ease: 'power2.out',
