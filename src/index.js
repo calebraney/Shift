@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const LOAD_GRID = '.load_grid';
   const LOAD_SQUARES = '.load_grid-item';
   const LOAD_PREVENT_ATTR = '[prevent-transition]';
-  const TRANSITION_DURATION = 0.45;
+  const TRANSITION_DURATION = 0.5;
 
   //GSAP Selectors
   const resetGSAPTriggers = document.querySelectorAll('[gsap-reset]');
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
       opacity: 0,
       stagger: {
         amount: TRANSITION_DURATION,
-        // duration: TRANSITION_DURATION / 2,
+        duration: TRANSITION_DURATION,
         ease: 'power2.out',
         from: 'random',
       },
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
             opacity: 1,
             stagger: {
               amount: TRANSITION_DURATION,
-              // duration: TRANSITION_DURATION,
+              duration: TRANSITION_DURATION,
               ease: 'power2.out',
               from: 'random',
             }, //you can also try a from: "start" or "end" -- get creative!
