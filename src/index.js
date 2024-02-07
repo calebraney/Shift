@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const LOAD_GRID = '.load_grid';
   const LOAD_SQUARES = '.load_grid-item';
   const LOAD_PREVENT_ATTR = '[prevent-transition]';
-  const TRANSITION_DURATION = 0.5;
+  const TRANSITION_DURATION = 0.4;
 
   //GSAP Selectors
   const resetGSAPTriggers = document.querySelectorAll('[gsap-reset]');
@@ -53,8 +53,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const pageLoad = function () {
     // Code that runs on pageload
     gsap.to(`${LOAD_SQUARES}`, {
-      delay: 0.15,
+      delay: 0.1,
       opacity: 0,
+      ease: 'power1.out',
       stagger: {
         amount: TRANSITION_DURATION,
         duration: TRANSITION_DURATION,
@@ -80,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (parentPrevent) {
         preventTransition = attr(false, parentPrevent.getAttribute('prevent-transition'));
       }
-      // stop page transition
+      //check link before page transatition
       if (
         this.hostname === window.location.host &&
         this.href.indexOf('#') === -1 &&
@@ -97,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
           },
           {
             opacity: 1,
+            ease: 'power1.out',
             stagger: {
               amount: TRANSITION_DURATION,
               duration: TRANSITION_DURATION,
