@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
       stagger: {
         amount: TRANSITION_DURATION,
         duration: TRANSITION_DURATION,
-        ease: 'power2.out',
+        ease: 'power1.out',
         from: 'random',
       },
       onStart: () => {
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
             stagger: {
               amount: TRANSITION_DURATION,
               duration: TRANSITION_DURATION,
-              ease: 'power2.out',
+              ease: 'power1.out',
               from: 'random',
             }, //you can also try a from: "start" or "end" -- get creative!
             onComplete: function () {
