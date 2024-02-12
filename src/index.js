@@ -50,28 +50,50 @@ document.addEventListener('DOMContentLoaded', function () {
 
   ///////////////////////////////
   //Page Load Animation
+  console.log('load');
   const pageLoad = function () {
     // Code that runs on pageload
-    gsap.to(`${LOAD_SQUARES}`, {
-      delay: 0.1,
-      opacity: 0,
+    gsap.to(`${LOAD_GRID}`, {
+      // delay: 0.1,
+      y: '110%',
       ease: 'power1.out',
-      stagger: {
-        amount: TRANSITION_DURATION,
-        duration: TRANSITION_DURATION,
-        ease: 'power1.out',
-        from: 'random',
-      },
+      duration: 0.5,
       onStart: () => {
         loadHome();
         loadHeader();
       },
       onComplete: () => {
         gsap.set(`${LOAD_GRID}`, { display: 'none' });
+        gsap.set(`${LOAD_GRID}`, { y: '0%' });
       },
     });
   };
   pageLoad();
+
+  //v1 load
+  // const pageLoad = function () {
+  //   // Code that runs on pageload
+  //   gsap.to(`${LOAD_SQUARES}`, {
+  //     delay: 0.1,
+  //     opacity: 0,
+  //     ease: 'power1.out',
+  //     duration: TRANSITION_DURATION,
+  //     // stagger: {
+  //     //   amount: TRANSITION_DURATION,
+  //     //   duration: TRANSITION_DURATION,
+  //     //   ease: 'power1.out',
+  //     //   from: 'random',
+  //     // },
+  //     onStart: () => {
+  //       loadHome();
+  //       loadHeader();
+  //     },
+  //     onComplete: () => {
+  //       gsap.set(`${LOAD_GRID}`, { display: 'none' });
+  //     },
+  //   });
+  // };
+  // pageLoad();
 
   // Page Transition
   links.forEach(function (link) {
@@ -91,24 +113,41 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         let destination = this.getAttribute('href');
         gsap.set(`${LOAD_GRID}`, { display: 'grid' });
+        // gsap.fromTo(
+        //   `${LOAD_SQUARES}`,
+        //   {
+        //     opacity: 0,
+        //   },
+        //   {
+        //     opacity: 1,
+        //     ease: 'power1.out',
+        //     stagger: {
+        //       amount: TRANSITION_DURATION,
+        //       duration: TRANSITION_DURATION,
+        //       ease: 'power1.out',
+        //       from: 'random',
+        //     }, //you can also try a from: "start" or "end" -- get creative!
+        //     onComplete: function () {
+        //       setTimeout(function () {
+        //         window.location = destination;
+        //       }, 100);
+        //     },
+        //   }
+        // );
         gsap.fromTo(
-          `${LOAD_SQUARES}`,
+          `${LOAD_GRID}`,
           {
-            opacity: 0,
+            y: '-110%',
           },
           {
-            opacity: 1,
+            // delay: 0.1,
+            y: '0%',
             ease: 'power1.out',
-            stagger: {
-              amount: TRANSITION_DURATION,
-              duration: TRANSITION_DURATION,
-              ease: 'power1.out',
-              from: 'random',
-            }, //you can also try a from: "start" or "end" -- get creative!
+            duration: 0.5,
             onComplete: function () {
               setTimeout(function () {
                 window.location = destination;
-              }, 100);
+              }, 0);
             },
           }
         );
