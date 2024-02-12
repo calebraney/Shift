@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // Global Variables
   // define variable for global use
   gsap.registerPlugin(ScrollTrigger);
-  gsap.registerPlugin(Flip);
   gsap.registerPlugin(TextPlugin);
   let mm = gsap.matchMedia();
 
