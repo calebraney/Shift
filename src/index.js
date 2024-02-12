@@ -13,26 +13,16 @@ document.addEventListener('DOMContentLoaded', function () {
   //////////////////////////////
   // Global Variables
   // define variable for global use
-  let mm = gsap.matchMedia();
-
   gsap.registerPlugin(ScrollTrigger);
   gsap.registerPlugin(Flip);
   gsap.registerPlugin(TextPlugin);
-
-  const links = document.querySelectorAll('a');
-  const pageWrapper = document.querySelector('.page-wrapper');
-  const pageMain = document.querySelector('.main-wrapper');
-  const CLIP_DEFAULT = '[clip-default]';
-  const CLIP_HOVER = '[clip-hover]';
-  const LOAD_GRID = '.load_grid';
-  const LOAD_SQUARES = '.load_grid-item';
-  const LOAD_PREVENT_ATTR = '[prevent-transition]';
-  const TRANSITION_DURATION = 0.4;
+  let mm = gsap.matchMedia();
 
   //GSAP Selectors
   const resetGSAPTriggers = document.querySelectorAll('[gsap-reset]');
-  // const LOAD_H1 = '[gsap-load="h1"]';
-  // const LOAD_EL = '[gsap-load="el"]';
+
+  const CLIP_DEFAULT = '[clip-default]';
+  const CLIP_HOVER = '[clip-hover]';
   const SCROLL_HEADING = '[gsap-scroll="heading"]';
   const SCROLL_EL = '[gsap-scroll="el"]';
   const SCROLL_CONTAINER = '[gsap-scroll="container"]';
@@ -43,117 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const LOAD_H2_WRAP = '[gsap-load="h2-wrap"]';
   const LOAD_ICON_WRAP = '[gsap-load="icon-wrap"]';
   const LOAD_TEXTURE = '[gsap-load="texture"]';
-
-  // const SCROLL_LINE = '[gsap-scroll="line"';
-  // const SCROLL_NUMBER = '[gsap-scroll="number"';
-  // const SCROLL_REFRESH = '[scrolltrigger-refresh]';
-
-  ///////////////////////////////
-  //Page Load Animation
-  console.log('load');
-  const pageLoad = function () {
-    // Code that runs on pageload
-    gsap.to(`${LOAD_GRID}`, {
-      // delay: 0.1,
-      y: '110%',
-      ease: 'power1.out',
-      duration: 0.5,
-      onStart: () => {
-        loadHome();
-        loadHeader();
-      },
-      onComplete: () => {
-        gsap.set(`${LOAD_GRID}`, { display: 'none' });
-        gsap.set(`${LOAD_GRID}`, { y: '0%' });
-      },
-    });
-  };
-  pageLoad();
-
-  //v1 load
-  // const pageLoad = function () {
-  //   // Code that runs on pageload
-  //   gsap.to(`${LOAD_SQUARES}`, {
-  //     delay: 0.1,
-  //     opacity: 0,
-  //     ease: 'power1.out',
-  //     duration: TRANSITION_DURATION,
-  //     // stagger: {
-  //     //   amount: TRANSITION_DURATION,
-  //     //   duration: TRANSITION_DURATION,
-  //     //   ease: 'power1.out',
-  //     //   from: 'random',
-  //     // },
-  //     onStart: () => {
-  //       loadHome();
-  //       loadHeader();
-  //     },
-  //     onComplete: () => {
-  //       gsap.set(`${LOAD_GRID}`, { display: 'none' });
-  //     },
-  //   });
-  // };
-  // pageLoad();
-
-  // Page Transition
-  links.forEach(function (link) {
-    link.addEventListener('click', function (e) {
-      let parentPrevent = this.closest(LOAD_PREVENT_ATTR);
-      let preventTransition = false;
-      if (parentPrevent) {
-        preventTransition = attr(false, parentPrevent.getAttribute('prevent-transition'));
-      }
-      //check link before page transatition
-      if (
-        this.hostname === window.location.host &&
-        this.href.indexOf('#') === -1 &&
-        this.target !== '_blank' &&
-        preventTransition === false
-      ) {
-        e.preventDefault();
-        let destination = this.getAttribute('href');
-        gsap.set(`${LOAD_GRID}`, { display: 'grid' });
-        // gsap.fromTo(
-        //   `${LOAD_SQUARES}`,
-        //   {
-        //     opacity: 0,
-        //   },
-        //   {
-        //     opacity: 1,
-        //     ease: 'power1.out',
-        //     stagger: {
-        //       amount: TRANSITION_DURATION,
-        //       duration: TRANSITION_DURATION,
-        //       ease: 'power1.out',
-        //       from: 'random',
-        //     }, //you can also try a from: "start" or "end" -- get creative!
-        //     onComplete: function () {
-        //       setTimeout(function () {
-        //         window.location = destination;
-        //       }, 100);
-        //     },
-        //   }
-        // );
-        gsap.fromTo(
-          `${LOAD_GRID}`,
-          {
-            y: '-110%',
-          },
-          {
-            // delay: 0.1,
-            y: '0%',
-            ease: 'power1.out',
-            duration: 0.5,
-            onComplete: function () {
-              setTimeout(function () {
-                window.location = destination;
-              }, 0);
-            },
-          }
-        );
-      }
-    });
-  });
 
   //////////////////////////////
   //LENIS Smoothscroll
@@ -351,7 +230,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const h1Text = runSplit(h1);
     const h2Text = runSplit(h2);
     const tl = gsap.timeline({
-      delay: TRANSITION_DURATION - 0.3,
       defaults: {
         duration: 0.8,
         ease: 'power2.out',
@@ -361,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function () {
         h2Text.revert();
       },
     });
-    tl.set(component, { opacity: 1 });
+    tl.set('[gsap-load="header"] > *', { opacity: 1 });
     tl.fromTo(
       texture,
       {
@@ -448,13 +326,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const slider = document.querySelector('[gsap-load="slider"]');
     if (!component) return;
     const tl = gsap.timeline({
-      delay: TRANSITION_DURATION - 0.3,
       defaults: {
         duration: 0.8,
         ease: 'power2.out',
       },
     });
-    tl.set(component, { opacity: 1 });
+    tl.set('[gsap-load="home"] > *', { opacity: 1 });
     tl.fromTo(
       h2WRap,
       {
@@ -910,6 +787,8 @@ document.addEventListener('DOMContentLoaded', function () {
       (context) => {
         let { isMobile, isTablet, isDesktop, reduceMotion } = context.conditions;
         // remove these animations if reduce motion is set
+        loadHome();
+        loadHeader();
         projectSlider();
         homeHeroSlider();
         projectGallerySlider();
